@@ -4,7 +4,7 @@
 [![.NET 8.0](https://img.shields.io/badge/.NET-8.0-purple.svg)](https://dotnet.microsoft.com/)
 [![WinUI 3](https://img.shields.io/badge/UI-WinUI%203%20%2F%20Windows%20App%20SDK-0078D4.svg)](https://github.com/microsoft/WindowsAppSDK)
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D6.svg)](https://www.microsoft.com/windows)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/uponatime2019/FileFox)
 
 **FileFox FTP Client** is a modern, native Windows desktop client for **FTP**, **FTPS**, and **SFTP**, built with **WinUI 3**, **Windows App SDK**, and **.NET 8**.
 
@@ -98,7 +98,7 @@ FileFox/
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/FileFox.git
+   git clone https://github.com/uponatime2019/FileFox.git
    cd FileFox
    ```
 
