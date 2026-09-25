@@ -1,9 +1,6 @@
 {
   "profiles": {
-    "FileFox - a better FTP Client (Package)": {
-      "commandName": "MsixPackage"
-    },
-    "FileFox - a better FTP Client (Unpackaged)": {
+    "FileFox FTP Client": {
       "commandName": "Project"
     }
   }

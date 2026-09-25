@@ -71,10 +71,9 @@ FileFox/
 ├── Views/                  # WinUI controls (DashboardView, ConnectionSessionView, FileEditorView)
 ├── App.xaml / .cs          # Application lifecycle, single-instance mutex, tray init
 ├── MainWindow.xaml / .cs   # Main application window, tab view container, backdrop
-├── FileFox.csproj          # .NET 8 / WinUI 3 project definition
+├── FileFox.csproj          # .NET 8 / WinUI 3 project definition (Unpackaged)
 ├── FileFox.sln             # Visual Studio solution file
-├── app.manifest            # Per-monitor V2 DPI awareness and OS compatibility manifest
-└── Package.appxmanifest    # MSIX packaging manifest
+└── app.manifest            # Per-monitor V2 DPI awareness and OS compatibility manifest
 ```
 
 ---
