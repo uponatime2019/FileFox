@@ -1,6 +1,6 @@
 # FileFox FTP Client
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![.NET 8.0](https://img.shields.io/badge/.NET-8.0-purple.svg)](https://dotnet.microsoft.com/)
 [![WinUI 3](https://img.shields.io/badge/UI-WinUI%203%20%2F%20Windows%20App%20SDK-0078D4.svg)](https://github.com/microsoft/WindowsAppSDK)
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D6.svg)](https://www.microsoft.com/windows)
@@ -138,7 +138,7 @@ FileFox/
 
 ## ⚖️ Licensing & Attribution
 
-- **FileFox FTP Client** is distributed under the [GNU General Public License v3.0 (GPL-3.0)](LICENSE).
+- **FileFox FTP Client** is distributed under the [MIT License](LICENSE).
 - **Inspiration**: The workflow and reference source is inspired by FileZilla 3.70.6 (copyright its respective contributors, licensed under GPL). *FileZilla* is a registered trademark of Tim Kosse; FileFox is an independent C# clean-room implementation.
 - **Third-Party Libraries**:
   - [FluentFTP](https://github.com/robinrodricks/FluentFTP) (MIT License)
