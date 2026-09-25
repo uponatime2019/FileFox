@@ -1,18 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Windows.Storage;
-
 namespace FileFox.Services;
 
 public sealed class LocalBookmarkService
 {
     private readonly SemaphoreSlim _fileLock = new(1, 1);
-    private readonly string _filePath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "local_bookmarks.json");
+    private readonly string _filePath = Path.Combine(AppStorageService.DataFolder, "local_bookmarks.json");
     private readonly JsonSerializerOptions _jsonOptions = new() { WriteIndented = true };
 
     public async Task<List<string>> LoadAsync()

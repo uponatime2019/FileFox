@@ -1,8 +1,7 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using System;
 using System.IO;
 using System.Reflection;
-using Windows.Storage;
 
 namespace FileFox.Services;
 
@@ -35,7 +34,7 @@ public sealed class StartupManager
         {
             try
             {
-                return ApplicationData.Current.LocalSettings.Values[SettingName] is bool value && value;
+                return AppStorageService.GetSetting<bool>(SettingName, false);
             }
             catch (Exception ex)
             {
@@ -49,7 +48,7 @@ public sealed class StartupManager
     {
         try
         {
-            ApplicationData.Current.LocalSettings.Values[SettingName] = enable;
+            AppStorageService.SetSetting(SettingName, enable);
             using RegistryKey? key = Registry.CurrentUser.OpenSubKey(RunKeyName, true);
             if (key == null)
             {

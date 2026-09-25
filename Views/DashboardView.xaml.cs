@@ -1,4 +1,4 @@
-﻿using FileFox.Models;
+using FileFox.Models;
 using FileFox.Services;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -41,7 +41,7 @@ public sealed partial class DashboardView : UserControl
         try
         {
             StartWithWindowsToggle.IsOn = _startupManager.SavedPreference;
-            var closeToTray = Windows.Storage.ApplicationData.Current.LocalSettings.Values["CloseToTray"] as bool? ?? true;
+            var closeToTray = AppStorageService.GetSetting<bool>("CloseToTray", true);
             CloseToTrayToggle.IsOn = closeToTray;
             UpdateThemeButtonState(ThemeService.CurrentTheme);
         }
@@ -74,7 +74,7 @@ public sealed partial class DashboardView : UserControl
 
     private void CloseToTrayToggle_Toggled(object sender, RoutedEventArgs e)
     {
-        Windows.Storage.ApplicationData.Current.LocalSettings.Values["CloseToTray"] = CloseToTrayToggle.IsOn;
+        AppStorageService.SetSetting("CloseToTray", CloseToTrayToggle.IsOn);
     }
 
     private void ToggleSettingsExpand_Click(object sender, RoutedEventArgs e)

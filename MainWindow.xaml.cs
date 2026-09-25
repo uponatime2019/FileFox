@@ -17,7 +17,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Graphics;
-using Windows.Storage;
 using WinRT.Interop;
 
 namespace FileFox;
@@ -121,8 +120,7 @@ public sealed partial class MainWindow : Window
     {
         try
         {
-            var value = ApplicationData.Current.LocalSettings.Values[CloseToTraySetting];
-            _closeToTray = value is not bool enabled || enabled;
+            _closeToTray = AppStorageService.GetSetting<bool>(CloseToTraySetting, true);
         }
         catch (Exception ex)
         {
@@ -256,7 +254,7 @@ public sealed partial class MainWindow : Window
     {
         try
         {
-            var tempDir = Path.Combine(ApplicationData.Current.TemporaryFolder.Path, "FileFoxEditors");
+            var tempDir = Path.Combine(AppStorageService.TempFolder, "FileFoxEditors");
             Directory.CreateDirectory(tempDir);
             var tempFilePath = Path.Combine(tempDir, $"{Guid.NewGuid():N}_{fileItem.Name}");
 
@@ -389,8 +387,8 @@ public sealed partial class MainWindow : Window
             _taskbarIcon = new TaskbarIcon
             {
                 ToolTipText = App.AppName,
-                ContextMenuMode = ContextMenuMode.SecondWindow,
-                IconSource = new BitmapImage(new Uri("ms-appx:///Assets/AppIcon.ico")),
+                ContextMenuMode = ContextMenuMode.ActiveWindow,
+                IconSource = new BitmapImage(new Uri(Path.Combine(AppContext.BaseDirectory, "Assets", "AppIcon.ico"))),
                 LeftClickCommand = TrayOpenCommand,
                 NoLeftClickDelay = true
             };

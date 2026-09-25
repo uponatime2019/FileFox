@@ -1,9 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
-using Windows.Storage;
 
 namespace FileFox.Services;
 
@@ -16,15 +15,14 @@ public static class AppLogger
     {
         try
         {
-            var localFolder = ApplicationData.Current.LocalFolder;
-            var logsDirectory = Path.Combine(localFolder.Path, "logs");
+            var logsDirectory = Path.Combine(AppStorageService.DataFolder, "logs");
             Directory.CreateDirectory(logsDirectory);
             Debug.WriteLine($"[AppLogger] Log directory: {logsDirectory}");
 
             var unixTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var fileName = $"app_session_{unixTimestamp}.txt";
             LogFilePath = Path.Combine(logsDirectory, fileName);
-            ApplicationData.Current.LocalSettings.Values["LastSessionLogFile"] = fileName;
+            AppStorageService.SetSetting("LastSessionLogFile", fileName);
             WriteEntry("Logger_Initialized", new Dictionary<string, object>
             {
                 ["logFile"] = LogFilePath

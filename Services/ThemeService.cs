@@ -1,6 +1,5 @@
-﻿using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml;
 using System;
-using Windows.Storage;
 
 namespace FileFox.Services;
 
@@ -12,7 +11,7 @@ public static class ThemeService
     {
         get
         {
-            var value = ApplicationData.Current.LocalSettings.Values[ThemeSettingKey] as string;
+            var value = AppStorageService.GetSetting<string>(ThemeSettingKey);
             if (Enum.TryParse<ElementTheme>(value, out var theme))
             {
                 return theme;
@@ -24,7 +23,7 @@ public static class ThemeService
     public static void ApplyTheme(FrameworkElement element, ElementTheme theme)
     {
         element.RequestedTheme = theme;
-        ApplicationData.Current.LocalSettings.Values[ThemeSettingKey] = theme.ToString();
+        AppStorageService.SetSetting(ThemeSettingKey, theme.ToString());
     }
 
     public static ElementTheme ToggleTheme(FrameworkElement element)

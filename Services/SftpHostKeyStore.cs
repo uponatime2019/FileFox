@@ -1,5 +1,4 @@
-﻿using System;
-using Windows.Storage;
+using System;
 
 namespace FileFox.Services;
 
@@ -9,7 +8,7 @@ public static class SftpHostKeyStore
     {
         try
         {
-            return ApplicationData.Current.LocalSettings.Values[GetKey(host, port)] as string;
+            return AppStorageService.GetSetting<string?>(GetKey(host, port), null);
         }
         catch (Exception ex)
         {
@@ -22,7 +21,7 @@ public static class SftpHostKeyStore
     {
         try
         {
-            ApplicationData.Current.LocalSettings.Values[GetKey(host, port)] = fingerprint;
+            AppStorageService.SetSetting(GetKey(host, port), fingerprint);
         }
         catch (Exception ex)
         {
