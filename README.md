@@ -10,6 +10,10 @@
 
 Designed from the ground up for Windows 11 and Windows 10, FileFox delivers a clean, Fluent Design experience with Mica material backdrops, seamless dark/light modes, and a multi-tabbed interface for managing multiple remote connections side by side.
 
+<p align="center">
+  <img src="Assets/screenshot.png" alt="FileFox FTP Client Screenshot" width="900" />
+</p>
+
 ---
 
 ## ✨ Features
