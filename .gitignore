@@ -33,3 +33,6 @@ Package.StoreAssociation.xml
 ## OS specific
 .DS_Store
 Thumbs.db
+
+# Local publish output
+publish_out/

@@ -12,6 +12,7 @@
     <PublishProfile>win-$(Platform).pubxml</PublishProfile>
     <UseWinUI>true</UseWinUI>
     <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
@@ -51,4 +52,10 @@
     <PublishTrimmed Condition="'$(Configuration)' == 'Debug'">False</PublishTrimmed>
     <PublishTrimmed Condition="'$(Configuration)' != 'Debug'">False</PublishTrimmed>
   </PropertyGroup>
+
+  <!-- WindowsAppSDK self-contained unpackaged publish drops the app PRI (known gap).
+       Without it the published exe fails at InitializeComponent with XamlParseException (0xC000027B). -->
+  <Target Name="CopyAppPriToPublish" AfterTargets="Publish" Condition="Exists('$(OutDir)$(AssemblyName).pri')">
+    <Copy SourceFiles="$(OutDir)$(AssemblyName).pri" DestinationFiles="$(PublishDir)resources.pri" />
+  </Target>
 </Project>

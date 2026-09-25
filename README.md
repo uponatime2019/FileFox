@@ -4,6 +4,7 @@
 [![.NET 8.0](https://img.shields.io/badge/.NET-8.0-purple.svg)](https://dotnet.microsoft.com/)
 [![WinUI 3](https://img.shields.io/badge/UI-WinUI%203%20%2F%20Windows%20App%20SDK-0078D4.svg)](https://github.com/microsoft/WindowsAppSDK)
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D6.svg)](https://www.microsoft.com/windows)
+[![Latest Release](https://img.shields.io/github/v/release/uponatime2019/FileFox?color=blue&label=Latest%20Release)](https://github.com/uponatime2019/FileFox/releases/latest)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/uponatime2019/FileFox)
 
 **FileFox FTP Client** is a modern, native Windows desktop client for **FTP**, **FTPS**, and **SFTP**, built with **WinUI 3**, **Windows App SDK**, and **.NET 8**.
@@ -13,6 +14,18 @@ Designed from the ground up for Windows 11 and Windows 10, FileFox delivers a cl
 <p align="center">
   <img src="Assets/screenshot.png" alt="FileFox FTP Client Screenshot" width="900" />
 </p>
+
+---
+
+## 📥 Download & run — no install needed
+
+The quickest way to try FileFox:
+
+1. Grab **`FileFox-vX.Y.Z-win-x64.zip`** from the [latest release](https://github.com/uponatime2019/FileFox/releases/latest)
+2. Right-click → **Extract All…**
+3. Double-click **`FileFox.exe`** — that's it. Portable, no installer, no admin rights, and no .NET download required (the runtime is bundled).
+
+> **First launch?** Windows SmartScreen may show *"Windows protected your PC"* because the app isn't code-signed — click **More info → Run anyway**. SFTP connections also need the [WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/), which comes pre-installed on Windows 11 and with Edge on Windows 10.
 
 ---
 
