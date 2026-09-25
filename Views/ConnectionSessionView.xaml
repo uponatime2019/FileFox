@@ -1,0 +1,502 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="FileFox.Views.ConnectionSessionView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:FileFox.Models"
+    mc:Ignorable="d">
+
+    <Grid x:Name="RootGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="210" />
+            <RowDefinition Height="32" />
+        </Grid.RowDefinitions>
+
+        <!-- Session Top Info Bar -->
+        <Border Grid.Row="0"
+                Margin="8,6,8,4"
+                Padding="12,8"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <FontIcon x:Name="ConnectionHeaderStatusIcon"
+                          Grid.Column="0"
+                          Margin="0,0,10,0"
+                          FontSize="16"
+                          Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                          Glyph="&#xE8AF;"
+                          VerticalAlignment="Center" />
+
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal" Spacing="8">
+                    <Image x:Name="FaviconImage"
+                           Width="20"
+                           Height="20"
+                           VerticalAlignment="Center"
+                           Margin="0,0,2,0"
+                           Visibility="Collapsed" />
+                    <TextBlock x:Name="HostTitleText" FontSize="16" FontWeight="Bold" Text="Connecting..." />
+                    <TextBlock x:Name="HostIpText" FontSize="13" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center" />
+                    <TextBlock x:Name="ProtocolText" FontSize="13" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <Button x:Name="ReconnectButton" Click="Reconnect_Click" Content="Reconnect" />
+                    <Button x:Name="DisconnectTopButton" Click="Disconnect_Click" Content="Disconnect" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- File Panes Grid -->
+        <Grid Grid.Row="1" Margin="8,4,8,6" ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Local File Pane -->
+            <Border Grid.Column="0"
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    
+                    <StackPanel Margin="10,8,10,4" Spacing="6">
+                        <Grid>
+                            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                <TextBlock Text="Local site"
+                                           FontSize="17"
+                                           FontWeight="SemiBold"
+                                           Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                           VerticalAlignment="Center" />
+                                <DropDownButton x:Name="LocalBookmarksButton"
+                                                Height="28"
+                                                MinHeight="28"
+                                                Content="Bookmarks"
+                                                FontSize="12"
+                                                VerticalAlignment="Center">
+                                    <DropDownButton.Flyout>
+                                        <MenuFlyout x:Name="LocalBookmarksFlyout" Opening="LocalBookmarksFlyout_Opening" />
+                                    </DropDownButton.Flyout>
+                                </DropDownButton>
+                            </StackPanel>
+                        </Grid>
+                        <Grid ColumnSpacing="6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0"
+                                    Height="34"
+                                    MinHeight="34"
+                                    VerticalAlignment="Center"
+                                    Click="RefreshLocal_Click"
+                                    ToolTipService.ToolTip="Refresh">
+                                <FontIcon Glyph="&#xE72C;" FontSize="14" />
+                            </Button>
+                            <Button Grid.Column="1"
+                                    Height="34"
+                                    MinHeight="34"
+                                    VerticalAlignment="Center"
+                                    Click="LocalUp_Click"
+                                    ToolTipService.ToolTip="Parent folder">
+                                <FontIcon Glyph="&#xE70E;" FontSize="14" />
+                            </Button>
+                            <TextBox x:Name="LocalPathTextBox"
+                                     Grid.Column="2"
+                                     Height="34"
+                                     MinHeight="34"
+                                     VerticalAlignment="Center"
+                                     KeyDown="LocalPathTextBox_KeyDown"
+                                     PlaceholderText="Local path..." />
+                            <Button Grid.Column="3"
+                                    Height="34"
+                                    MinHeight="34"
+                                    VerticalAlignment="Center"
+                                    Click="BrowseLocal_Click"
+                                    ToolTipService.ToolTip="Choose folder">
+                                <FontIcon Glyph="&#xE8B7;" FontSize="14" />
+                            </Button>
+                            <ToggleButton x:Name="LocalBookmarkToggleButton"
+                                          Grid.Column="4"
+                                          Height="34"
+                                          MinHeight="34"
+                                          VerticalAlignment="Center"
+                                          Click="LocalBookmarkToggle_Click"
+                                          ToolTipService.ToolTip="Bookmark this local folder">
+                                <FontIcon x:Name="LocalBookmarkIcon" Glyph="&#xE734;" FontSize="14" />
+                            </ToggleButton>
+                        </Grid>
+                    </StackPanel>
+
+                    <Grid Grid.Row="1" Margin="12,0" ColumnSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="28" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="90" />
+                            <ColumnDefinition Width="145" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" FontWeight="SemiBold" Text="Name" />
+                        <TextBlock Grid.Column="2" VerticalAlignment="Center" FontWeight="SemiBold" Text="Size" />
+                        <TextBlock Grid.Column="3" VerticalAlignment="Center" FontWeight="SemiBold" Text="Last modified" />
+                    </Grid>
+
+                    <ListView x:Name="LocalListView"
+                              Grid.Row="2"
+                              DoubleTapped="LocalListView_DoubleTapped"
+                              ItemsSource="{x:Bind LocalItems}"
+                              SelectionMode="Extended">
+                        <ListView.ContextFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Click="Upload_Click" Text="Upload">
+                                    <MenuFlyoutItem.Icon><FontIcon Glyph="&#xE898;" /></MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                                <MenuFlyoutSeparator />
+                                <MenuFlyoutItem Click="RefreshLocal_Click" Text="Refresh">
+                                    <MenuFlyoutItem.Icon><FontIcon Glyph="&#xE72C;" /></MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                            </MenuFlyout>
+                        </ListView.ContextFlyout>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="models:LocalFileItem">
+                                <Grid Padding="4,2" ColumnSpacing="8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="28" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="90" />
+                                        <ColumnDefinition Width="145" />
+                                    </Grid.ColumnDefinitions>
+                                    <FontIcon Grid.Column="0" FontSize="16" Glyph="{x:Bind Glyph}" />
+                                    <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{x:Bind Name}" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{x:Bind DisplaySize}" />
+                                    <TextBlock Grid.Column="3" VerticalAlignment="Center" Text="{x:Bind DisplayModified}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </Border>
+
+            <!-- Remote File Pane -->
+            <Border Grid.Column="1"
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Margin="10,8,10,4" Spacing="6">
+                        <Grid>
+                            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                <TextBlock Text="Remote site"
+                                           FontSize="17"
+                                           FontWeight="SemiBold"
+                                           Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                                           VerticalAlignment="Center" />
+                                <DropDownButton x:Name="RemoteBookmarksButton"
+                                                Height="28"
+                                                MinHeight="28"
+                                                Content="Bookmarks"
+                                                FontSize="12"
+                                                VerticalAlignment="Center">
+                                    <DropDownButton.Flyout>
+                                        <MenuFlyout x:Name="RemoteBookmarksFlyout" Opening="RemoteBookmarksFlyout_Opening" />
+                                    </DropDownButton.Flyout>
+                                </DropDownButton>
+                            </StackPanel>
+
+                            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                <Button Click="Upload_Click"
+                                        ToolTipService.ToolTip="Upload selected items">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <FontIcon Glyph="&#xE898;" FontSize="12" />
+                                        <TextBlock Text="Upload" FontSize="12" />
+                                    </StackPanel>
+                                </Button>
+                                <Button x:Name="EditRemoteFileButton"
+                                        Click="EditRemoteFile_Click"
+                                        Visibility="Collapsed"
+                                        ToolTipService.ToolTip="Edit text file in new tab">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <FontIcon Glyph="&#xE70F;" FontSize="12" />
+                                        <TextBlock Text="Edit" FontSize="12" />
+                                    </StackPanel>
+                                </Button>
+                                <Button Click="Download_Click"
+                                        ToolTipService.ToolTip="Download selected items">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <FontIcon Glyph="&#xE896;" FontSize="12" />
+                                        <TextBlock Text="Download" FontSize="12" />
+                                    </StackPanel>
+                                </Button>
+                                <Button Click="NewRemoteFolder_Click"
+                                        ToolTipService.ToolTip="Create new remote folder">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <FontIcon Glyph="&#xE8F4;" FontSize="12" />
+                                        <TextBlock Text="New folder" FontSize="12" />
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                        <Grid ColumnSpacing="6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0"
+                                    Height="34"
+                                    MinHeight="34"
+                                    VerticalAlignment="Center"
+                                    Click="RefreshRemote_Click"
+                                    ToolTipService.ToolTip="Refresh">
+                                <FontIcon Glyph="&#xE72C;" FontSize="14" />
+                            </Button>
+                            <Button Grid.Column="1"
+                                    Height="34"
+                                    MinHeight="34"
+                                    VerticalAlignment="Center"
+                                    Click="RemoteUp_Click"
+                                    ToolTipService.ToolTip="Parent folder">
+                                <FontIcon Glyph="&#xE70E;" FontSize="14" />
+                            </Button>
+                            <TextBox x:Name="RemotePathTextBox"
+                                     Grid.Column="2"
+                                     Height="34"
+                                     MinHeight="34"
+                                     VerticalAlignment="Center"
+                                     IsEnabled="False"
+                                     KeyDown="RemotePathTextBox_KeyDown"
+                                     Text="/" />
+                            <ToggleButton x:Name="RemoteBookmarkToggleButton"
+                                          Grid.Column="3"
+                                          Height="34"
+                                          MinHeight="34"
+                                          VerticalAlignment="Center"
+                                          Click="RemoteBookmarkToggle_Click"
+                                          ToolTipService.ToolTip="Bookmark this remote folder">
+                                <FontIcon x:Name="RemoteBookmarkIcon" Glyph="&#xE734;" FontSize="14" />
+                            </ToggleButton>
+                        </Grid>
+                    </StackPanel>
+
+                    <Grid Grid.Row="1" Margin="12,0" ColumnSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="28" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="90" />
+                            <ColumnDefinition Width="145" />
+                            <ColumnDefinition Width="90" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" FontWeight="SemiBold" Text="Name" />
+                        <TextBlock Grid.Column="2" VerticalAlignment="Center" FontWeight="SemiBold" Text="Size" />
+                        <TextBlock Grid.Column="3" VerticalAlignment="Center" FontWeight="SemiBold" Text="Last modified" />
+                        <TextBlock Grid.Column="4" VerticalAlignment="Center" FontWeight="SemiBold" Text="Permissions" />
+                    </Grid>
+
+                    <ListView x:Name="RemoteListView"
+                              Grid.Row="2"
+                              DoubleTapped="RemoteListView_DoubleTapped"
+                              ItemsSource="{x:Bind RemoteItems}"
+                              SelectionChanged="RemoteListView_SelectionChanged"
+                              SelectionMode="Extended">
+                        <ListView.ContextFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Click="EditRemoteFile_Click" Text="Edit">
+                                    <MenuFlyoutItem.Icon><FontIcon Glyph="&#xE70F;" /></MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                                <MenuFlyoutItem Click="Download_Click" Text="Download">
+                                    <MenuFlyoutItem.Icon><FontIcon Glyph="&#xE896;" /></MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                                <MenuFlyoutSeparator />
+                                <MenuFlyoutItem Click="NewRemoteFolder_Click" Text="New folder">
+                                    <MenuFlyoutItem.Icon><FontIcon Glyph="&#xE8F4;" /></MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                                <MenuFlyoutItem Click="RenameRemote_Click" Text="Rename">
+                                    <MenuFlyoutItem.Icon><FontIcon Glyph="&#xE8AC;" /></MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                                <MenuFlyoutItem Click="DeleteRemote_Click" Text="Delete">
+                                    <MenuFlyoutItem.Icon><FontIcon Glyph="&#xE74D;" /></MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                                <MenuFlyoutSeparator />
+                                <MenuFlyoutItem Click="RefreshRemote_Click" Text="Refresh">
+                                    <MenuFlyoutItem.Icon><FontIcon Glyph="&#xE72C;" /></MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                            </MenuFlyout>
+                        </ListView.ContextFlyout>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="models:RemoteFileItem">
+                                <Grid Padding="4,2" ColumnSpacing="8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="28" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="90" />
+                                        <ColumnDefinition Width="145" />
+                                        <ColumnDefinition Width="90" />
+                                    </Grid.ColumnDefinitions>
+                                    <FontIcon Grid.Column="0" FontSize="16" Glyph="{x:Bind Glyph}" />
+                                    <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{x:Bind Name}" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{x:Bind DisplaySize}" />
+                                    <TextBlock Grid.Column="3" VerticalAlignment="Center" Text="{x:Bind DisplayModified}" />
+                                    <TextBlock Grid.Column="4" VerticalAlignment="Center" Text="{x:Bind Permissions}" TextTrimming="CharacterEllipsis" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Message Log & Transfer Queue Row (50/50 Width) -->
+        <Grid Grid.Row="2" Margin="8,0,8,6" ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Message Log (50% Width) -->
+            <Border Grid.Column="0"
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Margin="10,0" VerticalAlignment="Center" FontWeight="SemiBold" Text="Message log" />
+                    <TextBox x:Name="MessageLogTextBox"
+                             Grid.Row="1"
+                             Padding="10,4"
+                             AcceptsReturn="True"
+                             FontFamily="Cascadia Mono, Consolas"
+                             FontSize="12"
+                             IsReadOnly="True"
+                             TextWrapping="NoWrap" />
+                </Grid>
+            </Border>
+
+            <!-- Transfer Queue (50% Width) -->
+            <Border Grid.Column="1"
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="34" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid Margin="10,0">
+                        <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="Transfer queue" />
+                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Spacing="4">
+                            <Button Click="CancelTransfer_Click" Content="Cancel selected" />
+                            <Button Click="ClearCompleted_Click" Content="Clear finished" />
+                        </StackPanel>
+                    </Grid>
+                    <ListView x:Name="TransferListView"
+                              Grid.Row="1"
+                              DoubleTapped="TransferListView_DoubleTapped"
+                              ItemsSource="{x:Bind TransferItems}"
+                              SelectionMode="Single">
+                        <ListView.ContextFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Click="OpenTransferFile_Click" Text="Open file">
+                                    <MenuFlyoutItem.Icon><FontIcon Glyph="&#xE8E5;" /></MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                                <MenuFlyoutItem Click="OpenTransferFolder_Click" Text="Open containing folder">
+                                    <MenuFlyoutItem.Icon><FontIcon Glyph="&#xE8B7;" /></MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                                <MenuFlyoutSeparator />
+                                <MenuFlyoutItem Click="CancelTransfer_Click" Text="Cancel transfer">
+                                    <MenuFlyoutItem.Icon><FontIcon Glyph="&#xE711;" /></MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                            </MenuFlyout>
+                        </ListView.ContextFlyout>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="models:TransferItem">
+                                <Grid Padding="6,3" ColumnSpacing="8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="24" />
+                                        <ColumnDefinition Width="130" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="90" />
+                                    </Grid.ColumnDefinitions>
+                                    <FontIcon Grid.Column="0" Glyph="{x:Bind DirectionGlyph}" FontSize="12" />
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock FontWeight="SemiBold" FontSize="11" Text="{x:Bind Name}" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock FontSize="10" Opacity="0.7" Text="{x:Bind Direction}" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                        <TextBlock FontSize="10" Text="{x:Bind RemotePath}" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock FontSize="10" Opacity="0.7" Text="{x:Bind LocalPath}" TextTrimming="CharacterEllipsis" />
+                                    </StackPanel>
+                                    <ProgressBar Grid.Column="3" VerticalAlignment="Center" Maximum="100" Value="{x:Bind Progress, Mode=OneWay}" />
+                                    <StackPanel Grid.Column="4" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                        <TextBlock HorizontalAlignment="Right" FontSize="11" Text="{x:Bind StatusText, Mode=OneWay}" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock HorizontalAlignment="Right" FontSize="10" Opacity="0.7" Text="{x:Bind DisplayBytes, Mode=OneWay}" />
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Status Bar -->
+        <Grid Grid.Row="3" Padding="10,0" ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <FontIcon x:Name="ConnectionStatusIcon" Grid.Column="0" FontSize="12" Foreground="Gray" Glyph="&#xE73E;" />
+            <TextBlock x:Name="ConnectionStatusText" Grid.Column="1" VerticalAlignment="Center" Text="Not connected" />
+            <TextBlock x:Name="ProtocolLabel" Grid.Column="2" VerticalAlignment="Center" Opacity="0.7" Text="FTP • FTPS • SFTP" />
+        </Grid>
+    </Grid>
+</UserControl>

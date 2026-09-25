@@ -1,0 +1,35 @@
+## .NET / Visual Studio
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+.vs/
+.vscode/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.pidb
+*.booproj
+*.svclog
+
+## WinUI / Windows App SDK / MSIX Packaging
+AppPackages/
+BundleArtifacts/
+PackagePlatformArtifacts/
+_pkginfo.txt
+*.msix
+*.appx
+*.appxbundle
+*.msixbundle
+*.cer
+*.pfx
+Package.StoreAssociation.xml
+
+## Rider / JetBrains
+.idea/
+*.sln.iml
+
+## OS specific
+.DS_Store
+Thumbs.db

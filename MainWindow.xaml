@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="FileFox.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:FileFox"
+    xmlns:views="using:FileFox.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="FileFox FTP Client">
+
+    <Window.SystemBackdrop>
+        <MicaBackdrop />
+    </Window.SystemBackdrop>
+
+    <Grid x:Name="RootGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <TabView x:Name="MainTabView"
+                 AddTabButtonClick="MainTabView_AddTabButtonClick"
+                 TabCloseRequested="MainTabView_TabCloseRequested"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Stretch">
+            <TabView.TabItems>
+                <TabViewItem x:Name="DashboardTab"
+                             Header="Dashboard"
+                             IsClosable="False">
+                    <TabViewItem.IconSource>
+                        <FontIconSource Glyph="&#xF246;" />
+                    </TabViewItem.IconSource>
+                    <views:DashboardView x:Name="DashboardViewControl"
+                                         ConnectRequested="DashboardView_ConnectRequested"
+                                         DeleteSiteRequested="DashboardView_DeleteSiteRequested"
+                                         ThemeToggleRequested="DashboardView_ThemeToggleRequested" />
+                </TabViewItem>
+            </TabView.TabItems>
+        </TabView>
+    </Grid>
+</Window>
